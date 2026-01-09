@@ -8,14 +8,22 @@
     <# In the O365 Compliance portal click on “Content search”. All previous content searches will be listed. Choose “New search” From the upper left menu option. Add the name and criteria of your search. Click Submit when finished. In this example I chose to use keyword “BHT Transports” and Sender rterpstra@lifeems.com and sent to specific users/groups. 
     Now that the Compliance search has been created, we will need to use PowerShell to delete the messages the search finds. Use the below commands to connect O365 using an admin account and delete the emails. #>
 <##>
-<# FUNCTIONS #>
-function SleepForLoad {
-    Start-Sleep -Milliseconds 100
+<# * FUNCTIONS AND VARIABLES #>
+Clear-Host
+# Check for Updates on Powershell Module
+try {
+    Write-Host "[+] Checking for updates on the ExchangeOnlineManagement module..." -ForegroundColor Yellow
+    Update-Module -Name ExchangeOnlineManagement -ErrorAction Stop
+    Write-Host "[+] Done"
+}
+catch {
+    Write-Host "[!] There was an error updating the ExchangeOnlineManagement module..." -ForegroundColor Red
+    throw $_
 }
 
 function DisplaySetupConfiguration {
 Clear-Host
-SleepForLoad
+Start-Sleep -Milliseconds 100 # to load colors
 Write-Host "___________              .__.__    __________                                  " -ForegroundColor "Red"
 Write-Host "\_   _____/ _____ _____  |__|  |   \______   \__ _________  ____   ___________ " -ForegroundColor "Red"
 Write-Host " |    __)_ /     \\__  \ |  |  |    |     ___/  |  \_  __ \/ ___\_/ __ \_  __ \" -ForegroundColor "Magenta"
@@ -62,7 +70,7 @@ if ($reenteringData -eq "Y") {
 Write-Host "" # empty line for space
 }
 
-<# START OF SCRIPT #>
+
 
 # reset all variables to starting default
 $setupConfigured = 'n'
@@ -72,10 +80,11 @@ $fromAddress = ''
 $emailSubject = ''
 $searchName = ''
 
+<# * START OF SCRIPT #>
 
 Clear-Host # clear terminal for visibility
 
-<# Setting up Variables #>
+<# User types in Variables #>
 while ($setupConfigured -ne 'y') {
 
     DisplaySetupConfiguration
@@ -106,9 +115,7 @@ while ($setupConfigured -ne 'y') {
     }
 }
 
-<##>
-
-# Start the Exchange Management module
+# * Start the Exchange Management module
 try {
     Write-Host "Importing ExchangeOnlineManagement module..." -ForegroundColor "Yellow"
     Import-Module ExchangeOnlineManagement -ErrorAction Stop
@@ -124,7 +131,7 @@ catch {
 try {
     Write-Host "Connecting to the Exchange Online Powershell Session..." -ForegroundColor "Yellow"
     # Connect to Exchange
-    Connect-IPPSSession -UserPrincipalName $UserPrincipalName -ErrorAction Stop
+    Connect-IPPSSession -UserPrincipalName $UserPrincipalName -EnableSearchOnlySession -ErrorAction Stop
     Write-Host "Connected to the Exchange Online Powershell Session!" -ForegroundColor "Green"
 }
 catch {
@@ -133,18 +140,21 @@ catch {
     throw $_
 }
 
-<# Search for emails… #>
+<# * Search for emails… #>
 # 1. Create the search query…
 $Search = New-ComplianceSearch -Name $SearchName -ExchangeLocation All -ContentMatchQuery "(From:$fromAddress) AND (Subject:$emailSubject)"
 
 # 2. Start the search…
 try {
     Write-Host "Starting search..." -ForegroundColor "Yellow"
-    Start-ComplianceSearch -Identity $Search.Identity -ErrorAction Stop
+    #Start-ComplianceSearch -Identity $Search.Identity -ErrorAction Stop
+    Start-ComplianceSearch -Identity $Search.Identity
     Write-Host "Search started!" -ForegroundColor "Green"
 }
 catch {
-    Write-Host "There was an issue with starting the search." -ForegroundColor "Red"
+    Write-Host "[!] There was an issue with starting the search." -ForegroundColor "Red"
+    Write-Host "[-] Disconnecting session..." -foreground Yellow
+    Disconnect-ExchangeOnline
     throw $_
 }
 
@@ -203,7 +213,7 @@ if ($job.Status -eq "Completed") {
                         Write-Host "Disconnecting from the Exchange Online session..." -ForegroundColor "Yellow"
                         Disconnect-ExchangeOnline -ErrorAction Stop
                         Write-Host "Successfully disconnected from the Exchange online session!" -ForegroundColor Green
-                        Start-Sleep
+                        Start-Sleep -Seconds 3
                         exit
                     }
                     catch {
@@ -255,5 +265,3 @@ if ($job.Status -eq "Completed") {
     Write-Host "There was an error with showing the results of the search not showing as completed or not being included in the while loop beforehand. $SearchName's status is not 'Completed', it listed as $status." -ForegroundColor "Red"
     throw $_
 }
-
-<# END OF SCRIPT #>
