@@ -1,13 +1,3 @@
-<# SEARCH AND DELETE EMAILS IN OFFICE 365 #>
-
-    # Microsoft link for more info
-        # https://learn.microsoft.com/en-us/microsoft-365/compliance/search-for-and-delete-messages-in-your-organization?view=o365-worldwide
-
-    # https://compliance.microsoft.com/contentsearchv2
-
-    <# In the O365 Compliance portal click on “Content search”. All previous content searches will be listed. Choose “New search” From the upper left menu option. Add the name and criteria of your search. Click Submit when finished. In this example I chose to use keyword “BHT Transports” and Sender rterpstra@lifeems.com and sent to specific users/groups. 
-    Now that the Compliance search has been created, we will need to use PowerShell to delete the messages the search finds. Use the below commands to connect O365 using an admin account and delete the emails. #>
-<##>
 <# * FUNCTIONS AND VARIABLES #>
 Clear-Host
 # Check for Updates on Powershell Module
@@ -195,6 +185,8 @@ if ($job.Status -eq "Completed") {
     } elseif ( $resultItems -ge 1) {
         Write-Host "[+] $resultItems matching emails were found." -foreground "Yellow"
         $results | Format-List Name, CreatedBy, CreatedTime, JobEndTime, Items, SuccessResults
+
+        Write-Host "[+] Please scroll to the top to view the results." -ForegroundColor Cyan
 
         # ask the user if they want to delete all emails
         Write-Host ""
