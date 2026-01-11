@@ -1,4 +1,3 @@
-<# * FUNCTIONS AND VARIABLES #>
 Clear-Host
 # Check for Updates on Powershell Module
 try {
@@ -11,6 +10,7 @@ catch {
     throw $_
 }
 
+<# * FUNCTIONS AND VARIABLES #>
 function DisplaySetupConfiguration {
     Clear-Host
     Start-Sleep -Milliseconds 100 # to load colors
@@ -20,7 +20,7 @@ function DisplaySetupConfiguration {
     Write-Host " |        \  Y Y  \/ __ \|  |  |__  |    |   |  |  /|  | \/ /_/  >  ___/|  | \/" -ForegroundColor "Magenta"
     Write-Host "/_______  /__|_|  (____  /__|____/  |____|   |____/ |__|  \___  / \___  >__|   " -ForegroundColor "Magenta"
     Write-Host "        \/      \/     \/                                /_____/      \/       " -ForegroundColor "Magenta"
-    Write-Host "" # empty line for space
+    Write-Host "" # terminal space for readability
     Write-Host "== Current Search Settings ==" -ForegroundColor Cyan
 
     Write-Host "Admin Email:          " -NoNewline
@@ -55,14 +55,14 @@ function DisplaySetupConfiguration {
     }
 
     if ($reenteringData -eq "Y") {
-        Write-Host "" # empty line for space
+        Write-Host "" # terminal space for readability
         Write-Host "Note: To re-enter correct data, you must type it out again. Entering nothing will clear the field." -ForegroundColor "Yellow"
     }
     else {
         <# do nothing #>
     }
 
-    Write-Host "" # empty line for space
+    Write-Host "" # terminal space for readability
 }
 
 
@@ -94,7 +94,7 @@ while ($setupConfigured -ne 'y') {
 
     $confirmSetupConfiguration = "" # reset the confirm variable in case the user had to go back to make
     while ('y', 'n' -notcontains $confirmSetupConfiguration) {
-        Write-Host ""
+        Write-Host "" # terminal space for readability
         $confirmSetupConfiguration = Read-Host "Is everything correct? (Y/N) [If you select No, you will have to enter everything again due to the current limitations of this script.]"
         if ($confirmSetupConfiguration -eq 'y') {
             Write-Host "[+] You confirmed this configuration is accurate." -ForegroundColor "Cyan"
@@ -119,7 +119,6 @@ try {
     Write-Host "[+] ExchangeOnlineManagement module imported!" -ForegroundColor "Green"
 }
 catch {
-    <#Do this if a terminating exception happens#>
     Write-Host "[!] There was an issue importing the ExchangeOnlineManagement module. Please check your Wi-Fi connection and try again." -ForegroundColor "Red"
     throw $_
 }
@@ -127,12 +126,10 @@ catch {
 # Connect to the Exchange Online Powershell Session
 try {
     Write-Host "[+]Connecting to the Exchange Online Powershell Session..." -ForegroundColor "Yellow"
-    # Connect to Exchange
     Connect-IPPSSession -UserPrincipalName $UserPrincipalName -EnableSearchOnlySession -ErrorAction Stop
     Write-Host "[+] Connected to the Exchange Online Powershell Session!" -ForegroundColor "Green"
 }
 catch {
-    <#Do this if a terminating exception happens#>
     Write-Host "[!] There was an issue connecting to the Exchange Online Powershell Session. Ensure your password is correct and that Exchange servers are online and try again." -ForegroundColor "Red"
     throw $_
 }
@@ -173,7 +170,7 @@ while ("Completed" -notcontains $job.status) {
 }
 if ($job.Status -eq "Completed") {
     $status = $job.Status
-    Write-Host "" #empty line for space
+    Write-Host "" # terminal space for readability
     Write-Host "[-] $SearchName is $status!" -ForegroundColor Green
     Read-Host "Press Enter to view the results of the search"
     Write-Host "8888888888888888888888888888888888888888888888888" -ForegroundColor "Cyan"
@@ -197,7 +194,7 @@ if ($job.Status -eq "Completed") {
         Write-Host "[+] Please scroll to the top to view the results." -ForegroundColor Cyan
 
         # ask the user if they want to delete all emails
-        Write-Host ""
+        Write-Host "" terminal space for readability
         $answer_Delete = "" # resets the variable to allow the below while loop
         while ($answer_Delete -ne 'y' -and $answer_Delete -ne 'n') {
             $answer_Delete = Read-Host "Do you want to delete all $resultItems found emails? (Y/N)"
@@ -264,7 +261,7 @@ if ($job.Status -eq "Completed") {
     Write-Host "8888888888888888888888888888888888888888888888888" -ForegroundColor "Cyan"
     Write-Host "888              End of Results               888" -ForegroundColor "Cyan"
     Write-Host "8888888888888888888888888888888888888888888888888" -ForegroundColor "Cyan"
-    Write-Host "" # just for space and readability
+    Write-Host "" # terminal space for readability
 }
 else {
     Write-Host "[!] There was an error with showing the results of the search not showing as completed or not being included in the while loop beforehand. $SearchName's status is not 'Completed', it listed as $status." -ForegroundColor "Red"
