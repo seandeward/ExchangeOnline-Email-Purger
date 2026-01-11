@@ -12,52 +12,57 @@ catch {
 }
 
 function DisplaySetupConfiguration {
-Clear-Host
-Start-Sleep -Milliseconds 100 # to load colors
-Write-Host "___________              .__.__    __________                                  " -ForegroundColor "Red"
-Write-Host "\_   _____/ _____ _____  |__|  |   \______   \__ _________  ____   ___________ " -ForegroundColor "Red"
-Write-Host " |    __)_ /     \\__  \ |  |  |    |     ___/  |  \_  __ \/ ___\_/ __ \_  __ \" -ForegroundColor "Magenta"
-Write-Host " |        \  Y Y  \/ __ \|  |  |__  |    |   |  |  /|  | \/ /_/  >  ___/|  | \/" -ForegroundColor "Magenta"
-Write-Host "/_______  /__|_|  (____  /__|____/  |____|   |____/ |__|  \___  / \___  >__|   " -ForegroundColor "Magenta"
-Write-Host "        \/      \/     \/                                /_____/      \/       " -ForegroundColor "Magenta"
-Write-Host "" # empty line for space
-Write-Host "== Current Search Settings ==" -ForegroundColor Cyan
-
-Write-Host "Admin Email:          " -NoNewline
-if ($UserPrincipalName -eq "") {
-    Write-Host "Not configured yet" -ForegroundColor "DarkGray"
-} else {
-    Write-Host "$UserPrincipalName" -ForegroundColor "Yellow"
-}
-
-Write-Host "Sender From Address:  " -NoNewline
-if ($fromAddress -eq "") {
-    Write-Host "Not configured yet" -ForegroundColor "DarkGray"
-} else {
-    Write-Host "$fromAddress" -ForegroundColor "Yellow"
-}
-
-Write-Host "Sender Email Subject: " -NoNewline
-if ($emailSubject -eq "") {
-    Write-Host "Not configured yet" -ForegroundColor "DarkGray"
-} else {
-    Write-Host "$emailSubject" -ForegroundColor "Yellow"
-}
-Write-Host "Search Name:          " -NoNewline
-if ($searchName -eq "") {
-    Write-Host "Not configured yet" -ForegroundColor "DarkGray"
-} else {
-    Write-Host "$searchName" -ForegroundColor "Yellow"
-}
-
-if ($reenteringData -eq "Y") {
+    Clear-Host
+    Start-Sleep -Milliseconds 100 # to load colors
+    Write-Host "___________              .__.__    __________                                  " -ForegroundColor "Red"
+    Write-Host "\_   _____/ _____ _____  |__|  |   \______   \__ _________  ____   ___________ " -ForegroundColor "Red"
+    Write-Host " |    __)_ /     \\__  \ |  |  |    |     ___/  |  \_  __ \/ ___\_/ __ \_  __ \" -ForegroundColor "Magenta"
+    Write-Host " |        \  Y Y  \/ __ \|  |  |__  |    |   |  |  /|  | \/ /_/  >  ___/|  | \/" -ForegroundColor "Magenta"
+    Write-Host "/_______  /__|_|  (____  /__|____/  |____|   |____/ |__|  \___  / \___  >__|   " -ForegroundColor "Magenta"
+    Write-Host "        \/      \/     \/                                /_____/      \/       " -ForegroundColor "Magenta"
     Write-Host "" # empty line for space
-    Write-Host "Note: To re-enter correct data, you must type it out again. Entering nothing will clear the field." -ForegroundColor "Yellow"
-} else {
-    <# do nothing #>
-}
+    Write-Host "== Current Search Settings ==" -ForegroundColor Cyan
 
-Write-Host "" # empty line for space
+    Write-Host "Admin Email:          " -NoNewline
+    if ($UserPrincipalName -eq "") {
+        Write-Host "Not configured yet" -ForegroundColor "DarkGray"
+    }
+    else {
+        Write-Host "$UserPrincipalName" -ForegroundColor "Yellow"
+    }
+
+    Write-Host "Sender From Address:  " -NoNewline
+    if ($fromAddress -eq "") {
+        Write-Host "Not configured yet" -ForegroundColor "DarkGray"
+    }
+    else {
+        Write-Host "$fromAddress" -ForegroundColor "Yellow"
+    }
+
+    Write-Host "Sender Email Subject: " -NoNewline
+    if ($emailSubject -eq "") {
+        Write-Host "Not configured yet" -ForegroundColor "DarkGray"
+    }
+    else {
+        Write-Host "$emailSubject" -ForegroundColor "Yellow"
+    }
+    Write-Host "Search Name:          " -NoNewline
+    if ($searchName -eq "") {
+        Write-Host "Not configured yet" -ForegroundColor "DarkGray"
+    }
+    else {
+        Write-Host "$searchName" -ForegroundColor "Yellow"
+    }
+
+    if ($reenteringData -eq "Y") {
+        Write-Host "" # empty line for space
+        Write-Host "Note: To re-enter correct data, you must type it out again. Entering nothing will clear the field." -ForegroundColor "Yellow"
+    }
+    else {
+        <# do nothing #>
+    }
+
+    Write-Host "" # empty line for space
 }
 
 
@@ -88,20 +93,22 @@ while ($setupConfigured -ne 'y') {
     DisplaySetupConfiguration
 
     $confirmSetupConfiguration = "" # reset the confirm variable in case the user had to go back to make
-    while ('y','n' -notcontains $confirmSetupConfiguration) {
+    while ('y', 'n' -notcontains $confirmSetupConfiguration) {
         Write-Host ""
-       $confirmSetupConfiguration = Read-Host "Is everything correct? (Y/N) [If you select No, you will have to enter everything again due to the current limitations of this script.]"
-       if ($confirmSetupConfiguration -eq 'y') {
-        Write-Host "[+] You confirmed this configuration is accurate." -ForegroundColor "Cyan"
-        $confirmSetupConfiguration = 'y' # Setup is confirmed. Continue the script by leaving the while loop
-        $setupConfigured = 'y'
-       } elseif ($confirmSetupConfiguration -eq 'n') {
-        Write-Host "[=] You selected 'N'. Please enter the setup again." -ForegroundColor "Cyan"
-        $confirmSetupConfiguration = 'n'
-        $reenteringData = 'y'
-       } else {
-        Write-Host "[!] Invalid answer. Please try again." -ForegroundColor "Red"
-       }
+        $confirmSetupConfiguration = Read-Host "Is everything correct? (Y/N) [If you select No, you will have to enter everything again due to the current limitations of this script.]"
+        if ($confirmSetupConfiguration -eq 'y') {
+            Write-Host "[+] You confirmed this configuration is accurate." -ForegroundColor "Cyan"
+            $confirmSetupConfiguration = 'y' # Setup is confirmed. Continue the script by leaving the while loop
+            $setupConfigured = 'y'
+        }
+        elseif ($confirmSetupConfiguration -eq 'n') {
+            Write-Host "[=] You selected 'N'. Please enter the setup again." -ForegroundColor "Cyan"
+            $confirmSetupConfiguration = 'n'
+            $reenteringData = 'y'
+        }
+        else {
+            Write-Host "[!] Invalid answer. Please try again." -ForegroundColor "Red"
+        }
     }
 }
 
@@ -159,7 +166,7 @@ while ("Completed" -notcontains $job.status) {
     for ($i = 1; $i -le 5; $i++) {
         Write-Host " ."-NoNewline
         Start-Sleep -Seconds 2
-        }
+    }
     # repeat get job status
     $job = Get-ComplianceSearch -Identity $SearchName
     Start-Sleep -Milliseconds 500
@@ -182,7 +189,8 @@ if ($job.Status -eq "Completed") {
         Write-Host "[+] $resultItems matching emails were found." -ForegroundColor "Green"
         Write-Host "If you believe there are supposed to be any matching emails, please ensure the search criteria is correct and try again."
         Read-Host "Press Enter to Continue"
-    } elseif ( $resultItems -ge 1) {
+    }
+    elseif ( $resultItems -ge 1) {
         Write-Host "[+] $resultItems matching emails were found." -foreground "Yellow"
         $results | Format-List Name, CreatedBy, CreatedTime, JobEndTime, Items, SuccessResults
 
@@ -218,42 +226,47 @@ if ($job.Status -eq "Completed") {
                     throw $_
                 }
                 
-            } elseif ($answer_Delete -eq 'N') {
+            }
+            elseif ($answer_Delete -eq 'N') {
                 Write-Host "[+] You selected not to delete the matching emails." -ForegroundColor "Cyan"
                 Write-Host "[+] Ending script..." -ForegroundColor "Yellow"
                 try {
-                        Write-Host "[+] Disconnecting from the Exchange Online session..." -ForegroundColor "Yellow"
-                        Disconnect-ExchangeOnline -ErrorAction Stop
-                        Write-Host "[+] Successfully disconnected from the Exchange online session!" -ForegroundColor "Green"
-                        Start-Sleep -Seconds 1
-                        Write-Host "[+] Closing Script..." -ForegroundColor "Yellow"
-                        Start-Sleep -Seconds 2
-                        Clear-Host
-                        exit
-                    }
-                    catch {
-                        Write-Host "[!] There was an error disconnecting from the Exchange Online session." -ForegroundColor "Red"
-                        throw $_
-                    }
+                    Write-Host "[+] Disconnecting from the Exchange Online session..." -ForegroundColor "Yellow"
+                    Disconnect-ExchangeOnline -ErrorAction Stop
+                    Write-Host "[+] Successfully disconnected from the Exchange online session!" -ForegroundColor "Green"
+                    Start-Sleep -Seconds 1
+                    Write-Host "[+] Closing Script..." -ForegroundColor "Yellow"
+                    Start-Sleep -Seconds 2
+                    Clear-Host
+                    exit
+                }
+                catch {
+                    Write-Host "[!] There was an error disconnecting from the Exchange Online session." -ForegroundColor "Red"
+                    throw $_
+                }
                 Start-Sleep -Seconds 2
                 Write-Host "[+] Closing Script..." -ForegroundColor "Cyan"
                 Start-Sleep -Seconds 2
                 Clear-Host
                 exit
-            } else {
+            }
+            else {
                 Write-Host "[!] Invalid Answer. Please Try again." -ForegroundColor "Red"
             }
         }
-    } elseif ($resultItems -le -1) {
+    }
+    elseif ($resultItems -le -1) {
         Write-Host "[!] The number of found items is less than 1. This shouldn't happen if everything was configured correctly. Please double check that everything was input correctly and try again." -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "[!] There was an error with getting the number of emails that match the search criteria. Please double check that everything is input correctly and try again. If it doesn't work again, please double check that this script is working properly." -ForegroundColor Red
     }
     Write-Host "8888888888888888888888888888888888888888888888888" -ForegroundColor "Cyan"
     Write-Host "888              End of Results               888" -ForegroundColor "Cyan"
     Write-Host "8888888888888888888888888888888888888888888888888" -ForegroundColor "Cyan"
     Write-Host "" # just for space and readability
-} else {
+}
+else {
     Write-Host "[!] There was an error with showing the results of the search not showing as completed or not being included in the while loop beforehand. $SearchName's status is not 'Completed', it listed as $status." -ForegroundColor "Red"
     throw $_
 }
