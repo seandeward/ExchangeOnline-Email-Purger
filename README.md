@@ -14,7 +14,7 @@ You can run the program in a terminal or in your IDE/ISE of choice.
 
 ### Configuration
 
-No configuration required. (Though you're free to fork this and make your own custom version of course!)
+No configuration required. You are able to run the script as is in your environment.
 
 You will be asked to fill a set of variables one at a time that determine the email you want to get rid of, such as the sender's address and email subject. The program is built to be easy to follow and understand.
 
@@ -41,4 +41,5 @@ I saw this as a great opportunity to automate this whole process using a while l
 
 ## Wishlist of Future Features
 ### GUI
+
 I'd love to add some kind of GUI to this, as that would provide a smoother modern way to enter the search criteria.
