@@ -203,7 +203,8 @@ if ($job.Status -eq "Completed") {
                     Write-Host "[+] Beginning to delete emails..." -ForegroundColor "Yellow"
                     # Delete found emails…
                     New-ComplianceSearchAction -SearchName $SearchName -Purge -PurgeType HardDelete -ErrorAction Stop
-                    Write-Host "[+] Emails deleted!" -ForegroundColor Green
+                    Write-Host "[+] Delete command sent!" -ForegroundColor Green
+                    Write-Host "        - Keep in mind it may take a moment before the emails are deleted. If you run another search immediately to check that the emails are gone, they may still appear again."
                     Read-Host "Press Enter to exit this script."
                     # To disconnect the Powershell session…
                     try {
