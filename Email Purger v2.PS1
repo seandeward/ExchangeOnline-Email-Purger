@@ -194,7 +194,7 @@ if ($job.Status -eq "Completed") {
         Write-Host "[+] Please scroll to the top to view the results." -ForegroundColor Cyan
 
         # ask the user if they want to delete all emails
-        Write-Host "" terminal space for readability
+        Write-Host "" # terminal space for readability
         $answer_Delete = "" # resets the variable to allow the below while loop
         while ($answer_Delete -ne 'y' -and $answer_Delete -ne 'n') {
             $answer_Delete = Read-Host "Do you want to delete all $resultItems found emails? (Y/N)"
